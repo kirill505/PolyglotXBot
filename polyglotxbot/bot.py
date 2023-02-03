@@ -1,22 +1,19 @@
-import asyncio
 import config
 import message_texts
-from telebot.async_telebot import AsyncTeleBot
+from aiogram import Dispatcher, Bot, types
 
-
-bot = AsyncTeleBot(config.token)
+TOKEN = config.token
+bot = Bot(token=TOKEN)
+dp = Dispatcher(bot)
 
 
 # Handle '/start' and '/help'
-@bot.message_handler(commands=['help', 'start'])
-async def send_welcome(message):
-    await bot.reply_to(message, message_texts.GREETINGS)
+@dp.message_handler(commands=['help', 'start'])
+async def start(message: types.Message):
+    await message.answer(f"Привет, {message.from_user.full_name}! {message_texts.GREETINGS}")
 
 
 # Handle all other messages with content_type 'text' (content_types defaults to ['text'])
-@bot.message_handler(func=lambda message: True)
-async def echo_message(message):
-    await bot.reply_to(message, message.text)
-
-
-asyncio.run(bot.polling())
+# @dp.message_handler()
+# async def echo_message(message: types.Message):
+#     await message.reply_to_message(message, message.text)
