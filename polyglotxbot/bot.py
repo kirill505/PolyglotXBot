@@ -14,6 +14,7 @@ async def start(message: types.Message):
 
 
 # Handle all other messages with content_type 'text' (content_types defaults to ['text'])
-# @dp.message_handler()
-# async def echo_message(message: types.Message):
-#     await message.reply_to_message(message, message.text)
+@dp.message_handler()
+async def echo_message(message: types.Message):
+    await message.reply("hello")
+
