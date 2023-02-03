@@ -10,6 +10,9 @@ python = "^3.9"
 fastapi = "^0.89.1"
 aiogram = "^2.24"
 uvicorn = "^0.20.0"
+youtube-transcript-api = "^0.5.0"
+googletrans = "^3.0.0"
+tqdm = "^4.64.1"
 
 
 [build-system]
