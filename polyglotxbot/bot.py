@@ -8,12 +8,19 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.callback_data import CallbackData
 from sqlite import create_profile, add_word_to_vocab, get_random_word_from_vocab, get_word_translaition, add_vocab, add_word_to_knowledge_base
 from misc.util import get_translated_word_list
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher.filters.state import StatesGroup, State
+from aiogram.dispatcher import FSMContext
 
+storage = MemoryStorage()
 TOKEN = config.token
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot=bot, storage=storage)
 crossIcon = u"\u274C"
 
+
+class ProfileStatesGroup(StatesGroup):
+    youtube_url = State()
 
 # Handle '/start' and '/help'
 @dp.message_handler(commands=['help', 'start'])
@@ -30,17 +37,23 @@ async def next_word(message: types.Message) -> None:
 @dp.message_handler(commands='youtube_add')
 async def youtube_vocab(message: types.Message) -> None:
     await message.answer("Отправьте в чат ссылку на ютуб видео")
+    await ProfileStatesGroup.youtube_url.set()
 
 
-@dp.message_handler(content_types='text')
-async def add_youtube_vocab(message: types.Message) -> None:
-    if "youtu" in message.text:
-        await message.answer("video starts parsing...")
-        yt_videoname, youtube_id, yt_word_list = get_translated_word_list(message.text)
-        await message.answer("parsing end, you can learn new words...")
-        await add_vocab(youtube_id, yt_videoname, "youtube")
-        for word, translation in yt_word_list.items():
-            await add_word_to_vocab(word, translation, youtube_id)
+@dp.message_handler(content_types='text', state=ProfileStatesGroup.youtube_url)
+async def add_youtube_vocab(message: types.Message, state: FSMContext) -> None:
+    async with state.proxy() as data:
+        if "youtu" in message.text:
+            data["yotube_url"] = message.text
+
+            await message.answer("video starts parsing...")
+            yt_videoname, youtube_id, yt_word_list = get_translated_word_list(message.text)
+            await message.answer("parsing end, you can learn new words...")
+            await add_vocab(youtube_id, yt_videoname, "youtube")
+            for word, translation in yt_word_list.items():
+                await add_word_to_vocab(word, translation, youtube_id)
+
+            await state.finish()
 
 
 async def get_word(chat_id, username):
