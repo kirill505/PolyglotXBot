@@ -91,7 +91,6 @@ def get_inline_keyboard(word, translation) -> InlineKeyboardMarkup:
 @dp.callback_query_handler(lambda callback_query: callback_query.data.startswith("btn"))
 async def handle_query(call: types.callback_query) -> None:
     username = call.from_user.username
-    word_list = json.load(open('db/active_word_list.json'))
     word = call["message"]["reply_markup"]["inline_keyboard"][0][0]["text"]
     translation = await get_word_translaition(word)
 
