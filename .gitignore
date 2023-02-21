@@ -1,4 +1,3 @@
-polyglotxbot/config.py
 .idea/
 polyglotxbot/__pycache__/
-polyglotxbot/db/*
+db/*

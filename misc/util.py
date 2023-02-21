@@ -1,4 +1,3 @@
-import json
 from googletrans import Translator
 from tqdm import tqdm
 from youtube_transcript_api import YouTubeTranscriptApi

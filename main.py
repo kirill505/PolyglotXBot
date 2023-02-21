@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from aiogram import types, Dispatcher, Bot
 from bot import dp, bot, TOKEN, NGROK_WEBHOOK
-import config
-import os
 from sqlite import db_start
 
 app = FastAPI()
