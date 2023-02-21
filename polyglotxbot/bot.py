@@ -1,4 +1,5 @@
 import config
+import os
 import message_texts
 import json
 import random
@@ -13,7 +14,8 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 
 storage = MemoryStorage()
-TOKEN = config.token
+TOKEN = os.environ['TOKEN']
+NGROK_WEBHOOK = os.environ['NGROK_WEBHOOK']
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot=bot, storage=storage)
 crossIcon = u"\u274C"

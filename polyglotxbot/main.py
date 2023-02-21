@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from aiogram import types, Dispatcher, Bot
-from bot import dp, bot, TOKEN
+from bot import dp, bot, TOKEN, NGROK_WEBHOOK
 import config
+import os
 from sqlite import db_start
 
 app = FastAPI()
 WEBHOOK_PATH = f"/bot/{TOKEN}"
-WEBHOOK_URL = config.ngrok_webhook + WEBHOOK_PATH
+WEBHOOK_URL = NGROK_WEBHOOK + WEBHOOK_PATH
 
 
 @app.on_event("startup")
