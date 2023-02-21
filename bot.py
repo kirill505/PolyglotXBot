@@ -1,13 +1,8 @@
-import config
 import os
 import message_texts
-import json
-import random
-import ast
 from aiogram import Dispatcher, Bot, types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram.utils.callback_data import CallbackData
-from sqlite import create_profile, add_word_to_vocab, get_random_word_from_vocab, get_word_translaition, add_vocab, add_word_to_knowledge_base
+from sqlite import create_profile, add_word_to_vocab, get_random_word_from_vocab, get_word_translaition, add_vocab
 from misc.util import get_translated_word_list
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import StatesGroup, State
