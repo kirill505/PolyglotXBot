@@ -49,5 +49,12 @@ async def add_vocab(vocab_id, vocab_name, vocab_source):
 
 
 async def add_word_to_knowledge_base(user_id, id_word, is_knowing):
-    cur.execute("INSERT INTO vocab(user_id, id_word, is_knowing) VALUES(?, ?, ?)", (user_id, id_word, is_knowing))
-    db.commit()
+    word_exists = cur.execute("SELECT id_word, user_id FROM knowledge_base WHERE user_id='{user_id}' AND id_word='{"
+                              "id_word}'".format(user_id=user_id, id_word=id_word)).fetchone()
+    if not word_exists:
+        cur.execute("INSERT INTO knowledge_base(user_id, id_word, is_knowing) VALUES(?, ?, ?)", (user_id, id_word, is_knowing))
+        db.commit()
+
+
+async def get_word_id(word):
+    return cur.execute("SELECT id_word FROM vocab WHERE word == '{word}'".format(word=word)).fetchone()[0]

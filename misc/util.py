@@ -32,7 +32,7 @@ def get_translated_word_list(youtube_link):
         all_words = list(preparate_subtitles_list(srt_lst))
         word_list = dict()
         yt = YouTube(youtube_link)
-        for lang in tqdm(all_words[:20], desc="Translated word list"):
+        for lang in tqdm(all_words[:2], desc="Translated word list"):
             translated = translator.translate(lang, dest='ru')
 
             word_list[translated.origin] = translated.text

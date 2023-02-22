@@ -2,7 +2,8 @@ import os
 import message_texts
 from aiogram import Dispatcher, Bot, types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from sqlite import create_profile, add_word_to_vocab, get_random_word_from_vocab, get_word_translaition, add_vocab
+from sqlite import create_profile, add_word_to_vocab, get_random_word_from_vocab, get_word_translaition, add_vocab, \
+    add_word_to_knowledge_base, get_word_id
 from misc.util import get_translated_word_list
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import StatesGroup, State
@@ -49,6 +50,8 @@ async def add_youtube_vocab(message: types.Message, state: FSMContext) -> None:
             await add_vocab(youtube_id, yt_videoname, "youtube")
             for word, translation in yt_word_list.items():
                 await add_word_to_vocab(word, translation, youtube_id)
+                word_id = await get_word_id(word)
+                await add_word_to_knowledge_base(message.from_user.id, word_id, False)
 
             await state.finish()
 
