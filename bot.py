@@ -3,7 +3,7 @@ import message_texts
 from aiogram import Dispatcher, Bot, types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from sqlite import create_profile, add_word_to_vocab, get_random_word_from_vocab, get_word_translaition, add_vocab, \
-    add_word_to_knowledge_base, get_word_id
+    add_word_to_knowledge_base, get_word_id, upgrade_word_status
 from misc.util import get_translated_word_list
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import StatesGroup, State
@@ -29,7 +29,7 @@ async def start(message: types.Message) -> None:
 
 @dp.message_handler(commands='word')
 async def next_word(message: types.Message) -> None:
-    await get_word(message.chat.id, message.from_user.username)
+    await get_word(message.chat.id, message.from_user.id)
 
 
 @dp.message_handler(commands='youtube_add')
@@ -56,8 +56,8 @@ async def add_youtube_vocab(message: types.Message, state: FSMContext) -> None:
             await state.finish()
 
 
-async def get_word(chat_id, username):
-    word, translation = await get_random_word_from_vocab()
+async def get_word(chat_id, user_id):
+    word, translation = await get_random_word_from_vocab(user_id)
     if not word:
         await bot.send_message(
             chat_id=chat_id,
@@ -79,7 +79,7 @@ def get_inline_keyboard(word, translation) -> InlineKeyboardMarkup:
             callback_data="btn_show_translation"),
         InlineKeyboardButton(
             text=crossIcon,
-            callback_data="btn_add_word_to_vocab"),
+            callback_data="btn_upgrade_word_status"),
     )
     ikb.add(
         InlineKeyboardButton(
@@ -101,4 +101,9 @@ async def handle_query(call: types.callback_query) -> None:
             text=word + " переводится как: " + translation)
 
     if call.data == "btn_next_word":
-        await get_word(chat_id=call.message.chat.id, username=username)
+        await get_word(chat_id=call.message.chat.id, user_id=call.from_user.id)
+
+    if call.data == "btn_upgrade_word_status":
+        word_id = await get_word_id(word)
+        await upgrade_word_status(call.from_user.id, word_id)
+        await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
