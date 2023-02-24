@@ -32,8 +32,12 @@ async def add_word_to_vocab(word, translation, vocab_id):
         db.commit()
 
 
-async def get_random_word_from_vocab():
-    id, word, translation, vocab_id = cur.execute("SELECT * FROM vocab ORDER BY RANDOM()").fetchone()
+async def get_random_word_from_vocab(user_id):
+    id, word, translation, vocab_id = cur.execute(f"SELECT * FROM vocab "
+                                                  f"WHERE id_word = ("
+                                                  f"SELECT id_word FROM knowledge_base "
+                                                  f"WHERE user_id=='{user_id}' AND is_knowing=0 "
+                                                  f"ORDER BY RANDOM() LIMIT 1);").fetchone()
     return word, translation
 
 
@@ -49,5 +53,17 @@ async def add_vocab(vocab_id, vocab_name, vocab_source):
 
 
 async def add_word_to_knowledge_base(user_id, id_word, is_knowing):
-    cur.execute("INSERT INTO vocab(user_id, id_word, is_knowing) VALUES(?, ?, ?)", (user_id, id_word, is_knowing))
+    word_exists = cur.execute("SELECT id_word, user_id FROM knowledge_base WHERE user_id='{user_id}' AND id_word='{"
+                              "id_word}'".format(user_id=user_id, id_word=id_word)).fetchone()
+    if not word_exists:
+        cur.execute("INSERT INTO knowledge_base(user_id, id_word, is_knowing) VALUES(?, ?, ?)", (user_id, id_word, is_knowing))
+        db.commit()
+
+
+async def get_word_id(word):
+    return cur.execute("SELECT id_word FROM vocab WHERE word == '{word}'".format(word=word)).fetchone()[0]
+
+
+async def upgrade_word_status(user_id, id_word):
+    cur.execute(f"UPDATE knowledge_base SET is_knowing=1 WHERE user_id=='{user_id}' AND id_word='{id_word}';")
     db.commit()
