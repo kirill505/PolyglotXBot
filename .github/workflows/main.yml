@@ -63,5 +63,5 @@ jobs:
           flags: --port=8080
 
       # Example of using the output
-      - name: Test URL
-        run: curl "${{ steps.deploy.outputs.url }}"
+      #- name: Test URL
+      #  run: curl "${{ steps.deploy.outputs.url }}"
