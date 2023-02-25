@@ -60,7 +60,7 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           region: us-central1
           service: app
-          flags: --port=8000
+          flags: --port=${{ env.PORT }}
 
       # Example of using the output
       #- name: Test URL
