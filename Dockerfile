@@ -2,7 +2,7 @@ FROM python:3.9.12
 
 WORKDIR .
 
-# ENV PORT 8080
+ENV PORT 8080
 
 COPY . .
 
