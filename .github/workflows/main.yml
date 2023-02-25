@@ -60,8 +60,8 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           region: us-central1
           service: app
-          flags: --port=8080
+          flags: --port=${{ env.PORT }}
 
       # Example of using the output
-      #- name: Test URL
-      #  run: curl "${{ steps.deploy.outputs.url }}"
+      - name: Test URL
+        run: curl "${{ steps.deploy.outputs.url }}"
