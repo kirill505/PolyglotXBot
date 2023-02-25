@@ -1,3 +1,5 @@
 .idea/
 polyglotxbot/__pycache__/
 db/*
+__pycache__/*
+misc/__pycache__/*
