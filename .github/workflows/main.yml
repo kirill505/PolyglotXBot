@@ -27,6 +27,8 @@ jobs:
     env:
       # Replace $PROJECT_ID with your project ID
       IMAGE_NAME: gcr.io/polyglotxbot/app
+      TOKEN: "5851653232:AAFeepjb8RpIBTudUwf8dPtve1IbngtWCL8"
+      NGROK_WEBHOOK: "https://f6cf-2800-810-446-85c-210b-6411-ecbd-c695.sa.ngrok.io"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
