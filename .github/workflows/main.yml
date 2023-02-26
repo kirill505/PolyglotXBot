@@ -29,6 +29,7 @@ jobs:
       IMAGE_NAME: gcr.io/polyglotxbot/app
       TOKEN: "5851653232:AAFeepjb8RpIBTudUwf8dPtve1IbngtWCL8"
       NGROK_WEBHOOK: "https://f6cf-2800-810-446-85c-210b-6411-ecbd-c695.sa.ngrok.io"
+      PORT: 8080
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -60,8 +61,8 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           region: us-central1
           service: app
-          flags: --port=8080
+#          flags: --port=8080
 
       # Example of using the output
-      #- name: Test URL
-      #  run: curl "${{ steps.deploy.outputs.url }}"
+      - name: Test URL
+        run: curl "${{ steps.deploy.outputs.url }}"
