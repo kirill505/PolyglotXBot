@@ -54,6 +54,10 @@ jobs:
       - name: Push Docker image
         run: docker push $IMAGE_NAME
 
+      # Example of using the output
+      - name: Test URL
+        run: curl "${{ steps.deploy.outputs.url }}"
+
       - id: deploy
         name: Deploy Docker image
         uses: "google-github-actions/deploy-cloudrun@v0"
@@ -62,7 +66,3 @@ jobs:
           region: us-central1
           service: app
           flags: --port=8080
-
-      # Example of using the output
-      - name: Test URL
-        run: curl "${{ steps.deploy.outputs.url }}"
